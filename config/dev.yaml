@@ -1,0 +1,10 @@
+env: "dev"
+alias_length: 7
+http_server:
+  address: ":8090"
+  timeout: 4s
+  idle_timeout: 30s
+sso_grpc_api:
+  address: "sso.internal.com:44044"
+  timeout: 4s
+  retries_count: 5

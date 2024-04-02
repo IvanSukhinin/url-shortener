@@ -1,0 +1,43 @@
+version: '3.9'
+
+networks:
+  url-shortener-network:
+    name: url-shortener-network
+  go-apps-network:
+    name: go-apps-network
+
+volumes:
+  db:
+
+x-common: &common
+  restart: 'no'
+
+services:
+  app:
+    <<: *common
+    build:
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    ports:
+      - '8090:8090'
+    volumes:
+      - .:/app
+    env_file:
+      - .env
+    networks:
+      - url-shortener-network
+      - go-apps-network
+
+  db:
+    <<: *common
+    image: postgres
+    hostname: "db-host"
+    ports:
+      - "54321:5432"
+    volumes:
+      - db:/var/lib/postgresql/data
+    env_file:
+      - .env
+    networks:
+      - url-shortener-network
