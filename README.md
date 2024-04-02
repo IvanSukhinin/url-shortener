@@ -1,7 +1,7 @@
 # URL SHORTENER
 
 ## sso grpc api for this app
-https://github.com/IvanSukhinin/sso-proto
+https://github.com/IvanSukhinin/sso-grpc
 
 ## proto
 https://github.com/IvanSukhinin/sso-proto
