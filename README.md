@@ -1,5 +1,11 @@
 # URL SHORTENER
 
+## sso grpc api for this app
+https://github.com/IvanSukhinin/sso-proto
+
+## proto
+https://github.com/IvanSukhinin/sso-proto
+
 ## local deploy
 1) Containers build and up
 ```shell
