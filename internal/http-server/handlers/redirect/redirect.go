@@ -13,12 +13,12 @@ import (
 	"url-shortener/internal/storage"
 )
 
-// UrlGetter is an interface for getting url by alias.
-type UrlGetter interface {
-	GetUrl(alias string) (string, error)
+// URLGetter is an interface for getting url by alias.
+type URLGetter interface {
+	GetURL(alias string) (string, error)
 }
 
-func New(log *slog.Logger, urlGetter UrlGetter) http.HandlerFunc {
+func New(log *slog.Logger, urlGetter URLGetter) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		const op = "handlers.url.redirect.New"
 
@@ -34,7 +34,7 @@ func New(log *slog.Logger, urlGetter UrlGetter) http.HandlerFunc {
 			return
 		}
 
-		resUrl, err := urlGetter.GetUrl(alias)
+		resURL, err := urlGetter.GetURL(alias)
 		if errors.Is(err, storage.ErrAliasNotFound) {
 			log.Info("url not found", "alias", alias)
 			render.JSON(w, r, resp.Error("not found"))
@@ -46,8 +46,8 @@ func New(log *slog.Logger, urlGetter UrlGetter) http.HandlerFunc {
 			return
 		}
 
-		log.Info("got url", slog.String("url", resUrl))
+		log.Info("got url", slog.String("url", resURL))
 
-		http.Redirect(w, r, resUrl, http.StatusFound)
+		http.Redirect(w, r, resURL, http.StatusFound)
 	}
 }

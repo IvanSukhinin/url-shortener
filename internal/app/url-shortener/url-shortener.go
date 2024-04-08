@@ -23,7 +23,7 @@ import (
 
 const envDev = "dev"
 
-type UrlShortener struct {
+type URLShortener struct {
 	cfg    *config.Config
 	log    *slog.Logger
 	db     *postgresql.Storage
@@ -32,8 +32,8 @@ type UrlShortener struct {
 	srv    *http.Server
 }
 
-func New() *UrlShortener {
-	us := &UrlShortener{}
+func New() *URLShortener {
+	us := &URLShortener{}
 	us.cfg = config.MustLoad()
 	us.log = setupLogger(us.cfg.Env)
 	us.db = initDatabase(us)
@@ -47,7 +47,7 @@ func New() *UrlShortener {
 	return us
 }
 
-func Run(us *UrlShortener) {
+func Run(us *URLShortener) {
 	defer us.db.Close()
 
 	us.log.Info(
@@ -82,7 +82,7 @@ func Run(us *UrlShortener) {
 	us.log.Info("server stopped")
 }
 
-func initDatabase(us *UrlShortener) *postgresql.Storage {
+func initDatabase(us *URLShortener) *postgresql.Storage {
 	var err error
 	db, err := postgresql.New(us.cfg.Db)
 	if err != nil {
@@ -92,7 +92,7 @@ func initDatabase(us *UrlShortener) *postgresql.Storage {
 	return db
 }
 
-func initSsoGrpcApi(us *UrlShortener) (*ssogrpc.Client, error) {
+func initSsoGrpcApi(us *URLShortener) (*ssogrpc.Client, error) {
 	return ssogrpc.New(
 		context.Background(),
 		us.log,
@@ -102,7 +102,7 @@ func initSsoGrpcApi(us *UrlShortener) (*ssogrpc.Client, error) {
 	)
 }
 
-func initRouter(us *UrlShortener) *chi.Mux {
+func initRouter(us *URLShortener) *chi.Mux {
 	router := chi.NewRouter()
 
 	router.Use(middleware.RequestID)
@@ -116,14 +116,14 @@ func initRouter(us *UrlShortener) *chi.Mux {
 	return router
 }
 
-func initHandlers(router *chi.Mux, us *UrlShortener) {
+func initHandlers(router *chi.Mux, us *URLShortener) {
 	router.Get("/", alist.New(us.log, us.db))
 	router.Post("/save", save.New(us.cfg, us.log, us.db))
 	router.Get("/del", del.New(us.log, us.db))
 	router.Get("/{alias}", redirect.New(us.log, us.db))
 }
 
-func initServer(us *UrlShortener) *http.Server {
+func initServer(us *URLShortener) *http.Server {
 	return &http.Server{
 		Addr:         us.cfg.HTTPServer.Address,
 		Handler:      us.router,

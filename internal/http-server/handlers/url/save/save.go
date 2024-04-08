@@ -20,7 +20,7 @@ import (
 )
 
 type Request struct {
-	Url   string `json:"url" validate:"required,url"`
+	URL   string `json:"url" validate:"required,url"`
 	Alias string `json:"alias,omitempty" validate:"omitempty,alphanum"`
 }
 
@@ -91,7 +91,7 @@ func New(cfg *config.Config, log *slog.Logger, aliasSaver AliasSaver) http.Handl
 		}
 
 		// try to save url alias
-		err = aliasSaver.SaveAlias(req.Url, alias)
+		err = aliasSaver.SaveAlias(req.URL, alias)
 		if err != nil {
 			if errors.Is(err, storage.ErrAliasExists) {
 				log.Info("alias already exists", slog.String("alias", req.Alias))

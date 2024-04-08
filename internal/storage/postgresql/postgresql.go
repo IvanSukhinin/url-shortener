@@ -19,7 +19,7 @@ type Storage struct {
 
 type Alias struct {
 	Id    uuid.UUID `json:"id"`
-	Url   string    `json:"url"`
+	URL   string    `json:"url"`
 	Alias string    `json:"alias"`
 }
 
@@ -52,18 +52,18 @@ func (s *Storage) SaveAlias(url string, alias string) error {
 	return nil
 }
 
-func (s *Storage) GetUrl(alias string) (string, error) {
-	const op = "storage.postgresql.GetUrl"
+func (s *Storage) GetURL(alias string) (string, error) {
+	const op = "storage.postgresql.GetURL"
 	row := s.db.QueryRow("SELECT url FROM url_alias WHERE alias = $1", alias)
-	var resUrl string
-	err := row.Scan(&resUrl)
+	var resURL string
+	err := row.Scan(&resURL)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return "", storage.ErrAliasNotFound
 		}
 		return "", fmt.Errorf("%s: %w", op, err)
 	}
-	return resUrl, nil
+	return resURL, nil
 }
 
 func (s *Storage) DeleteAlias(alias string) error {
@@ -86,7 +86,7 @@ func (s *Storage) GetAliasList() (*[]Alias, error) {
 
 	for rows.Next() {
 		var alias Alias
-		if err := rows.Scan(&alias.Id, &alias.Alias, &alias.Url); err != nil {
+		if err := rows.Scan(&alias.Id, &alias.Alias, &alias.URL); err != nil {
 			return &aliases, fmt.Errorf("%s, %w", op, err)
 		}
 		aliases = append(aliases, alias)
