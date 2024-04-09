@@ -1,8 +1,10 @@
 package main
 
-import app "url-shortener/internal/app/url-shortener"
+import (
+	"url-shortener/internal/app/us"
+)
 
 func main() {
-	us := app.New()
-	app.Run(us)
+	app := us.New()
+	app.Run()
 }

@@ -1,4 +1,4 @@
-package url_shortener
+package us
 
 import (
 	"context"
@@ -47,7 +47,7 @@ func New() *URLShortener {
 	return us
 }
 
-func Run(us *URLShortener) {
+func (us *URLShortener) Run() {
 	defer us.db.Close()
 
 	us.log.Info(
@@ -83,7 +83,6 @@ func Run(us *URLShortener) {
 }
 
 func initDatabase(us *URLShortener) *postgresql.Storage {
-	var err error
 	db, err := postgresql.New(us.cfg.Db)
 	if err != nil {
 		us.log.Error("failed to init database", sl.Err(err))
